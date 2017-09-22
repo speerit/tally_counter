@@ -1,6 +1,6 @@
 Vue.component( "tally-list" , {
 	template: `
-	<div class='tally-list'>
+	<div class='tally-list' v-on:click='saveTallies'>
     <h2>First Component</h2>
     <tally-block v-for='(tallyData, index) in tallies'
       v-bind:key=index
@@ -9,6 +9,12 @@ Vue.component( "tally-list" , {
   </div>
   `,
   data: function (){return {tallies: load()}},
+  methods:{
+    saveTallies: function(){
+      console.log("ran")
+      save(this.tallies)
+    }
+  }
 })
 
 Vue.component( "tally-block" , {
