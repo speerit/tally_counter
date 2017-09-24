@@ -1,10 +1,12 @@
 Vue.component( "tally-list" , {
 	template: `
-	<div class='tally-list' v-on:click='saveTallies'>
+	<div class='tally-list' >
     <h2>First Component</h2>
     <tally-block v-for='(tallyData, index) in tallies'
       v-bind:key=index
-      v-bind:tallyData=tallyData>
+      v-bind:tallyData=tallyData
+      v-on:change='saveTallies'
+      >
     </tally-block>
   </div>
   `,
@@ -23,7 +25,8 @@ Vue.component( "tally-block" , {
     <h3>{{tallyData.description}}</h3>
     <div class='count-block'>
       <h3>Done {{tallyData.count}} times.</h3>
-      <button v-on:click='countPlusPlus'>
+      <button
+        v-on:click='countPlusPlus'>
         +1
       </button>
     </div>
@@ -33,6 +36,7 @@ Vue.component( "tally-block" , {
   methods:{
     countPlusPlus: function(){
       this.tallyData.count += 1
+      this.$emit('change')
     }
   }
 })
