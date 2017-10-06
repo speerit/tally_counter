@@ -11,14 +11,17 @@ Vue.component( "tally-list" , {
 
     <tally-form
       v-if='newTally'
-      v-on:submitCreate='parseForm'></tally-form>
+      v-on:submitCreate='parseForm'>
+    </tally-form>
 
-    <tally-block v-for='(tallyData, index) in tallies'
-      v-bind:key=index
-      v-bind:tallyData=tallyData
-      v-on:change='saveTallies'
-      >
-    </tally-block>
+    <ul>
+      <tally-block v-for='(tallyData, index) in tallies'
+        v-bind:key=index
+        v-bind:tallyData=tallyData
+        v-on:change='saveTallies'
+        >
+      </tally-block>
+    </ul>
   </div>
   `,
   data: function (){return {tallies: load(), newTally: false}},
