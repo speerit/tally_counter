@@ -1,0 +1,22 @@
+.tally-list ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tally-block {
+  border: black solid;
+  width: 23%;
+  flex-grow: 0;
+  margin: .5%;
+}
+
+@media screen and (max-width: 800px) {
+    .tally-block {
+      width: 47%;
+    }
+}
+@media screen and (max-width: 600px) {
+    .tally-block {
+      width: 90%;
+    }
+}
