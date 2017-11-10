@@ -1,4 +1,4 @@
-describe("Meta", function() {
+describe("Meta Component", function() {
   it("should run tests",function(){
     expect(true).toEqual(true)
   })
@@ -33,5 +33,5 @@ describe('TallyBlock', function(){
     expect(testBlock.tallyData.count).toEqual(0)
   })
 
-})
+});
 
