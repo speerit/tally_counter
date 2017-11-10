@@ -58,9 +58,23 @@ Vue.component( "tally-block" , {
     </div>
   </div>
   `,
+
+  computed:{
+    count: function(){
+      var totalCount = 0
+      console.log("count calculated")
+      for (var index = 0; index < this.tallyData.tallies.length; index++) {
+        totalCount += this.tallyData.tallies[index].quantity
+        console.log(this.tallyData.tallies[index].quantity)
+      };
+      return totalCount
+    }
+  },
+
   methods:{
     countPlusPlus: function(){
-      this.tallyData.count += 1
+      // this.tallyData.tallies.push({quantity: 1, timestamp: Date.now()})
+      // console.log(this.tallyData.tallies)
       this.$emit('change')
     },
     countMinusMinus: function(){
