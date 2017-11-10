@@ -51,6 +51,10 @@ Vue.component( "tally-block" , {
         v-on:click='countPlusPlus'>
         +1
       </button>
+      <button
+        v-on:click='countMinusMinus'>
+        -1
+      </button>
     </div>
   </div>
   `,
@@ -58,7 +62,12 @@ Vue.component( "tally-block" , {
     countPlusPlus: function(){
       this.tallyData.count += 1
       this.$emit('change')
+    },
+    countMinusMinus: function(){
+      this.tallyData.count -= 1
+      this.$emit('change')
     }
+
   }
 })
 
