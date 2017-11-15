@@ -19,18 +19,19 @@ describe('TallyBlock', function(){
 
   it('should increment count', function(){
     var testBlock = tallyBlockGen({description: "make new tally counter", tallies: [], goal: false})
-    expect(testBlock.tallyData.count).toEqual(0)
-    // testBlock.countPlusPlus()
-    // expect(testBlock.tallyData.count).toEqual(1)
+    expect(testBlock.count).toEqual(0)
+    testBlock.countPlusPlus()
+    expect(testBlock.count).toEqual(1)
   })
 
   it('should decrement count', function(){
     var testBlock = tallyBlockGen({description: "make new tally counter", tallies: [], goal: false})
-    expect(testBlock.tallyData.count).toEqual(0)
+    // debugger
+    expect(testBlock.count).toEqual(0)
     testBlock.countPlusPlus()
-    expect(testBlock.tallyData.count).toEqual(1)
+    expect(testBlock.count).toEqual(1)
     testBlock.countMinusMinus()
-    expect(testBlock.tallyData.count).toEqual(0)
+    expect(testBlock.count).toEqual(0)
   })
 
 });

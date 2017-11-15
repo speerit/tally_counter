@@ -73,12 +73,11 @@ Vue.component( "tally-block" , {
 
   methods:{
     countPlusPlus: function(){
-      // this.tallyData.tallies.push({quantity: 1, timestamp: Date.now()})
-      // console.log(this.tallyData.tallies)
+      this.tallyData.tallies.push({quantity: 1, timestamp: Date.now()})
       this.$emit('change')
     },
     countMinusMinus: function(){
-      this.tallyData.count -= 1
+      this.tallyData.tallies.push({quantity: -1, timestamp: Date.now()})
       this.$emit('change')
     }
 
