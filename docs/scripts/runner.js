@@ -1,4 +1,4 @@
-
+//
 function load (){
 	// return [{description: "test", count: 0}, {description: "test2", count: 0}, {description: "test3", count: 3}];
   var loadedData = JSON.parse(
@@ -29,5 +29,5 @@ function versionUpdate1to2(oldData){
   return newData
 }
 
-// new Vue({el: "#tally-list"})
+new Vue({el: "#tally-list"})
 

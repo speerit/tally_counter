@@ -46,7 +46,7 @@ Vue.component( "tally-block" , {
   <div class='tally-block'>
     <h3>{{tallyData.description}}</h3>
     <div class='count-block'>
-      <h3>Done {{tallyData.count}} times.</h3>
+      <h3>Done {{count}} times.</h3>
       <button
         v-on:click='countPlusPlus'>
         +1
