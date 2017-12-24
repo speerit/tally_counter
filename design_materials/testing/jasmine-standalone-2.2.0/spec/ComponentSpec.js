@@ -33,6 +33,8 @@ describe('TallyBlock', function(){
     testBlock.countMinusMinus()
     expect(testBlock.count).toEqual(0)
   })
+  it('should have a goal property', function(){
 
+  })
 });
 
