@@ -71,6 +71,18 @@ Vue.component( "tally-block" , {
         console.log(this.tallyData.tallies[index].quantity)
       };
       return totalCount
+    },
+    goalMet: function(){
+      var now = Date.now();
+      var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
+      var totalCount = 0
+      for (var index = 0; index < this.tallyData.tallies.length; index++) {
+        if(this.tallyData.tallies[index].timestamp<earlierBound){
+          break
+        }
+        totalCount += this.tallyData.tallies[index].quantity
+      };
+      return totalCount >= this.tallyData.goal.target
     }
   },
 
