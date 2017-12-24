@@ -45,6 +45,9 @@ Vue.component( "tally-block" , {
   template: `
   <div class='tally-block'>
     <h3>{{tallyData.description}}</h3>
+    <div class='goal-block' v-if="tallyData.goal">
+      Goal: finish at least {{tallyData.goal.target}} times per {{tallyData.goal.interval}} days
+    </div>
     <div class='count-block'>
       <h3>Done {{count}} times.</h3>
       <button

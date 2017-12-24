@@ -33,8 +33,36 @@ describe('TallyBlock', function(){
     testBlock.countMinusMinus()
     expect(testBlock.count).toEqual(0)
   })
-  it('should have a goal property', function(){
-
+  describe('Tally goals', function(){
+    it('should have a goal property', function(){
+      var testBlock = tallyBlockGen({
+        description: "make new tally counter",
+        tallies: [],
+        goal:{
+          interval: 3,
+          target: 2
+        }
+      })
+      expect(testBlock.tallyData.goal.target).toEqual(2)
+      expect(testBlock.$mount().$el.textContent.includes('Goal')).toEqual(true)
+      expect(testBlock.$mount().$el.textContent.includes('3')).toEqual(true)
+      expect(testBlock.$mount().$el.textContent.includes('2')).toEqual(true)
+    })
+    it('should calculate if the goal is met', function(){
+      var testBlock = tallyBlockGen({
+        description: "make new tally counter",
+        tallies: [],
+        goal:{
+          interval: 3,
+          target: 2
+        }
+      })
+      expect(testBlock.goalMet).toEqual(false)
+      testBlock.countPlusPlus()
+      testBlock.countPlusPlus()
+      testBlock.countPlusPlus()
+      expect(testBlock.goalMet).toEqual(true)
+    })
   })
 });
 
