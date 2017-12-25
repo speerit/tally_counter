@@ -63,6 +63,17 @@ describe('TallyBlock', function(){
       testBlock.countPlusPlus()
       expect(testBlock.goalMet).toEqual(true)
     })
+    it('Should be able to stop counting successfully reached goals', function(){
+      var testBlock = tallyBlockGen({
+        description: "make new tally counter",
+        tallies: [{quantity:4, timestamp:Date.now()-4*86400000}],
+        goal:{
+          interval: 3,
+          target: 2
+        }
+      })
+      expect(testBlock.goalMet).toEqual(false)
+    })
   })
 });
 
