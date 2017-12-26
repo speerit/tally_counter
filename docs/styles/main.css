@@ -10,6 +10,16 @@
   margin: .5%;
 }
 
+.tally-block.no-goal-set {
+  background-color: #dadada;
+}
+.tally-block.goal-met {
+  background-color: #bada55;
+}
+.tally-block.goal-unmet {
+  background-color: #da8a55;
+}
+
 @media screen and (max-width: 800px) {
     .tally-block {
       width: 47%;

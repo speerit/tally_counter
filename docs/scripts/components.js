@@ -79,6 +79,8 @@ Vue.component( "tally-block" , {
       }
       var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
       var totalCount = 0
+      console.log(this.tallyData.description)
+      console.log(this.tallyData.tallies)
       for (var index = 0; index < this.tallyData.tallies.length; index++) {
         if(this.tallyData.tallies[index].timestamp<earlierBound){
           break
@@ -140,7 +142,7 @@ Vue.component("tally-form", {
 
   `,
   data: function(){
-    return { count: 0, description: '', hasGoal:false, goal:{}}
+    return { tallies: [], description: '', hasGoal:false, goal:{}}
   },
   methods:{
     finishCreate: function(event){
