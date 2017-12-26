@@ -104,6 +104,26 @@ Vue.component("tally-form", {
     <form>
       <span>Tally Description</span>
       <input type='text' v-model='description'></input>
+      <br>
+      <span>Track periodic goal?</span>
+      <input type='checkbox' v-model='hasGoal'></input>
+      <div class='goal_subform' v-if='hasGoal'>
+        <span>Over how many days do you want to meet this goal?</span>
+        <br>
+        <input
+          type='number'
+          min='1'
+          v-model='goal.interval'>
+        </input>
+        <br>
+        <span>How many times do you want to do this thing?</span>
+        <br>
+        <input
+          type='number'
+          min='1' value='1'
+          v-model='goal.target'>
+        </input>
+      </div>
       <button
         v-on:click='finishCreate'>
         Go!
@@ -112,15 +132,18 @@ Vue.component("tally-form", {
 
   `,
   data: function(){
-    return { count: 0, description: ''}
+    return { count: 0, description: '', hasGoal:false, goal:{}}
   },
   methods:{
     finishCreate: function(event){
       event.preventDefault()
-      console.log(this.$data)
-      console.log(JSON.stringify(this.$data))
+      var outputData = JSON.parse(JSON.stringify(this.$data))
+      if(!outputData.hasGoal){outputData.goal=false}
+      delete outputData.hasGoal
+      console.log(outputData)
+      console.log(JSON.stringify(outputData))
       // console.log(this)
-      this.$emit('submitCreate', this.$data)
+      this.$emit('submitCreate', outputData)
     }
   }
 
