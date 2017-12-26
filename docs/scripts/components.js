@@ -43,7 +43,7 @@ Vue.component( "tally-list" , {
 Vue.component( "tally-block" , {
   props:["tallyData"],
   template: `
-  <div class='tally-block'>
+  <div class='tally-block' :class='goalCSS'>
     <h3>{{tallyData.description}}</h3>
     <div class='goal-block' v-if="tallyData.goal">
       Goal: finish at least {{tallyData.goal.target}} times per {{tallyData.goal.interval}} days
@@ -74,6 +74,9 @@ Vue.component( "tally-block" , {
     },
     goalMet: function(){
       var now = Date.now();
+      if(!this.tallyData.goal){
+        return undefined
+      }
       var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
       var totalCount = 0
       for (var index = 0; index < this.tallyData.tallies.length; index++) {
@@ -83,6 +86,11 @@ Vue.component( "tally-block" , {
         totalCount += this.tallyData.tallies[index].quantity
       };
       return totalCount >= this.tallyData.goal.target
+    },
+    goalCSS: function(){
+      if(!this.tallyData.goal){return 'no-goal-set'}
+      if(this.goalMet){return 'goal-met'}
+      return 'goal-unmet'
     }
   },
 

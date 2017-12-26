@@ -84,7 +84,7 @@ describe('TallyBlock', function(){
         }
       })
       testBlock.countPlusPlus()
-      expect(testBlock.$mount().$el.textContent.includes('.goal-met')).toEqual(true)
+      expect(testBlock.$mount().$el.className.includes('goal-met')).toEqual(true)
     })
     it('should be styled differently if goal is not met', function(){
       var testBlock = tallyBlockGen({
@@ -95,7 +95,7 @@ describe('TallyBlock', function(){
           target: 1
         }
       })
-      expect(testBlock.$mount().$el.textContent.includes('.goal-unmet')).toEqual(true)
+      expect(testBlock.$mount().$el.className.includes('goal-unmet')).toEqual(true)
     })
     it('should be styled differently if no goal', function(){
       var testBlock = tallyBlockGen({
@@ -103,7 +103,8 @@ describe('TallyBlock', function(){
         tallies: [],
         goal:false
       })
-      expect(testBlock.$mount().$el.textContent.includes('.no-goal-set')).toEqual(true)
+      expect(testBlock.$mount().$el.className.includes('no-goal-set')).toEqual(true)
+      // debugger
     })
   })
 });
