@@ -4,6 +4,8 @@ expand tally data from
 to
   description
   goal {}
+    hasGoal
+    atLeast
     interval
     target
   tallies [{}]
