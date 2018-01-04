@@ -118,21 +118,24 @@ Vue.component("tally-form", {
       <span>Track periodic goal?</span>
       <input type='checkbox' v-model='goal.hasGoal'></input>
       <div class='goal_subform' v-if='goal.hasGoal'>
-        <span>Over how many days do you want to meet this goal?</span>
-        <br>
-        <input
-          type='number'
-          min='1'
-          v-model='goal.interval'>
-        </input>
-        <br>
-        <span>How many times do you want to do this thing?</span>
-        <br>
+        I want to do this thing
+        <select v-model='goal.atLeast'>
+          <option v-bind:value="true">at least</option>
+          <option v-bind:value="false">at most</option>
+        </select>
         <input
           type='number'
           min='1' value='1'
           v-model='goal.target'>
         </input>
+        {{goal.target==1 ? 'time' : 'times'}}
+        every
+        <input
+          type='number'
+          min='1'
+          v-model='goal.interval'>
+        </input>
+        days
       </div>
       <button
         v-on:click='finishCreate'>
