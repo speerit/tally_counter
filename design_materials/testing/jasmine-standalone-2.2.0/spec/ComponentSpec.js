@@ -85,6 +85,14 @@ describe('TallyBlock', function(){
       testBlock.countPlusPlus()
       expect(testBlock.goalMet).toEqual(true)
     })
+    it('anti-goals calculate completion properly',function(){
+      expect(blockWAntiGoal.goalMet).toEqual(true)
+      blockWAntiGoal.countPlusPlus()
+      blockWAntiGoal.countPlusPlus()
+      blockWAntiGoal.countPlusPlus()
+      blockWAntiGoal.countPlusPlus()
+      expect(blockWAntiGoal.goalMet).toEqual(false)
+    })
     it('Should be able to disregard past work for present goals', function(){
       var testBlock = blockWGoal
       testBlock.tallyData.tallies.push(

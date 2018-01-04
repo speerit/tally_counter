@@ -87,7 +87,12 @@ Vue.component( "tally-block" , {
         }
         totalCount += this.tallyData.tallies[index].quantity
       };
-      return totalCount >= this.tallyData.goal.target
+      if(this.tallyData.goal.atLeast){
+        return totalCount >= this.tallyData.goal.target
+      }
+      if(!this.tallyData.goal.atLeast){
+        return totalCount <= this.tallyData.goal.target
+      }
     },
     goalCSS: function(){
       if(!this.tallyData.goal.hasGoal){return 'no-goal-set'}
@@ -162,6 +167,4 @@ Vue.component("tally-form", {
       this.$emit('submitCreate', outputData)
     }
   }
-
-
 })
