@@ -46,7 +46,9 @@ Vue.component( "tally-block" , {
   <div class='tally-block' :class='goalCSS'>
     <h3>{{tallyData.description}}</h3>
     <div class='goal-block' v-if="tallyData.goal.hasGoal">
-      Goal: finish at least
+      Goal:
+        finish at
+        {{tallyData.goal.atLeast ? 'least' : 'most'}}
         {{tallyData.goal.target}}
         {{tallyData.goal.target==1 ? "time" : "times"}}
         per {{tallyData.goal.interval}} days
