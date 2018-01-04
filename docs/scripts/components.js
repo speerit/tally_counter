@@ -85,9 +85,7 @@ Vue.component( "tally-block" , {
       }
       var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
       var totalCount = 0
-      console.log(this.tallyData.description)
-      console.log(this.tallyData.tallies)
-      for (var index = 0; index < this.tallyData.tallies.length; index++) {
+      for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
         if(this.tallyData.tallies[index].timestamp<earlierBound){
           break
         }
@@ -104,6 +102,32 @@ Vue.component( "tally-block" , {
       if(!this.tallyData.goal.hasGoal){return 'no-goal-set'}
       if(this.goalMet){return 'goal-met'}
       return 'goal-unmet'
+    },
+    lastDoneString: function(){
+      var runningTotal = 0
+      var lastTime
+      var now = Date.now()
+      for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+        runningTotal += this.tallyData.tallies[index].quantity;
+        lastTime = this.tallyData.tallies[index].timestamp;
+        if(runningTotal > 0){break}
+      };
+      var deltaT = now-lastTime
+      var deltaHours = Math.floor(deltaT / (60*60*1000))
+      console.log(deltaHours)
+      var lastDate = new Date(lastTime)
+      if(deltaHours>=24){
+        return `${1900+lastDate.getYear()}-${1+lastDate.getMonth}-${lastDate.getDay()}`
+      }
+      if(deltaHours < 1){
+        return 'less than an hour ago'
+      }
+      if(deltaHours < 2){
+        return 'an hour ago'
+      }
+
+      return `${deltaHours} hours ago`
+
     }
   },
 
