@@ -45,7 +45,7 @@ Vue.component( "tally-block" , {
   template: `
   <div class='tally-block' :class='goalCSS'>
     <h3>{{tallyData.description}}</h3>
-    <div class='goal-block' v-if="tallyData.goal">
+    <div class='goal-block' v-if="tallyData.goal.hasGoal">
       Goal: finish at least {{tallyData.goal.target}} times per {{tallyData.goal.interval}} days
     </div>
     <div class='count-block'>
@@ -74,7 +74,7 @@ Vue.component( "tally-block" , {
     },
     goalMet: function(){
       var now = Date.now();
-      if(!this.tallyData.goal){
+      if(!this.tallyData.goal.hasGoal){
         return undefined
       }
       var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
@@ -90,7 +90,7 @@ Vue.component( "tally-block" , {
       return totalCount >= this.tallyData.goal.target
     },
     goalCSS: function(){
-      if(!this.tallyData.goal){return 'no-goal-set'}
+      if(!this.tallyData.goal.hasGoal){return 'no-goal-set'}
       if(this.goalMet){return 'goal-met'}
       return 'goal-unmet'
     }
@@ -116,8 +116,8 @@ Vue.component("tally-form", {
       <input type='text' v-model='description'></input>
       <br>
       <span>Track periodic goal?</span>
-      <input type='checkbox' v-model='hasGoal'></input>
-      <div class='goal_subform' v-if='hasGoal'>
+      <input type='checkbox' v-model='goal.hasGoal'></input>
+      <div class='goal_subform' v-if='goal.hasGoal'>
         <span>Over how many days do you want to meet this goal?</span>
         <br>
         <input
@@ -142,14 +142,17 @@ Vue.component("tally-form", {
 
   `,
   data: function(){
-    return { tallies: [], description: '', hasGoal:false, goal:{}}
+    return {
+      tallies: [],
+      description: '',
+      goal:{hasGoal:false, target:1, interval:1, atLeast:true}}
   },
   methods:{
     finishCreate: function(event){
       event.preventDefault()
       var outputData = JSON.parse(JSON.stringify(this.$data))
-      if(!outputData.hasGoal){outputData.goal=false}
-      delete outputData.hasGoal
+      // if(!outputData.hasGoal){outputData.goal=false}
+      // delete outputData.hasGoal
       console.log(outputData)
       console.log(JSON.stringify(outputData))
       // console.log(this)

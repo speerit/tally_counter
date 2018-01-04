@@ -13,12 +13,15 @@ function tallyBlockGen(tallyData){
 describe('TallyBlock', function(){
   var blockWGoal
   var blockNGoal
+  var blockWAntiGoal
 
   beforeEach(function(){
     blockWGoal = tallyBlockGen({
         description: "make new tally counter",
         tallies: [],
         goal:{
+          hasGoal: true,
+          atLeast: true,
           interval: 3,
           target: 2
         }
@@ -26,7 +29,22 @@ describe('TallyBlock', function(){
     blockNGoal = tallyBlockGen({
         description: "make new tally counter",
         tallies: [],
-        goal: false
+        goal: {
+          hasGoal: false,
+          atLeast: false,
+          interval: 1,
+          target: 1
+        }
+      })
+    blockWAntiGoal = tallyBlockGen({
+        description: "make new tally counter",
+        tallies: [],
+        goal:{
+          hasGoal: true,
+          atLeast: false,
+          interval: 3,
+          target: 2
+        }
       })
   })
   it('should have a description property', function(){
