@@ -100,6 +100,16 @@ describe('TallyBlock', function(){
         )
       expect(testBlock.goalMet).toEqual(false)
     })
+    it('Should be able to check recent work for progress', function(){
+      var testBlock = blockWGoal
+      testBlock.tallyData.tallies.push(
+        {quantity:4, timestamp:Date.now()-4*86400000}
+        )
+      testBlock.countPlusPlus()
+      testBlock.countPlusPlus()
+      testBlock.countPlusPlus()
+      expect(testBlock.goalMet).toEqual(true)
+    })
     it('should be styled differently if goal is met', function(){
       var testBlock = blockWGoal
       testBlock.countPlusPlus()
