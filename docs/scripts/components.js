@@ -43,10 +43,21 @@ Vue.component( "tally-list" , {
 Vue.component( "tally-block" , {
   props:["tallyData"],
   template: `
-  <div class='tally-block'>
+  <div class='tally-block' :class='goalCSS'>
     <h3>{{tallyData.description}}</h3>
+    <div class='goal-block' v-if="tallyData.goal.hasGoal">
+      Goal:
+        finish at
+        {{tallyData.goal.atLeast ? 'least' : 'most'}}
+        {{tallyData.goal.target}}
+        {{tallyData.goal.target==1 ? "time" : "times"}}
+        per {{tallyData.goal.interval}} days
+    </div>
+    <div class='last-done-block' v-if='!tallyData.goal.hasGoal'>
+      Last done: {{lastDoneString}}
+    </div>
     <div class='count-block'>
-      <h3>Done {{tallyData.count}} times.</h3>
+      <h3>Done {{count}} times.</h3>
       <button
         v-on:click='countPlusPlus'>
         +1
@@ -58,13 +69,77 @@ Vue.component( "tally-block" , {
     </div>
   </div>
   `,
+
+  computed:{
+    count: function(){
+      var totalCount = 0
+      console.log("count calculated")
+      for (var index = 0; index < this.tallyData.tallies.length; index++) {
+        totalCount += this.tallyData.tallies[index].quantity
+        console.log(this.tallyData.tallies[index].quantity)
+      };
+      return totalCount
+    },
+    goalMet: function(){
+      var now = Date.now();
+      if(!this.tallyData.goal.hasGoal){
+        return undefined
+      }
+      var earlierBound = now-this.tallyData.goal.interval*24*60*60*1000
+      var totalCount = 0
+      for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+        if(this.tallyData.tallies[index].timestamp<earlierBound){
+          break
+        }
+        totalCount += this.tallyData.tallies[index].quantity
+      };
+      if(this.tallyData.goal.atLeast){
+        return totalCount >= this.tallyData.goal.target
+      }
+      if(!this.tallyData.goal.atLeast){
+        return totalCount <= this.tallyData.goal.target
+      }
+    },
+    goalCSS: function(){
+      if(!this.tallyData.goal.hasGoal){return 'no-goal-set'}
+      if(this.goalMet){return 'goal-met'}
+      return 'goal-unmet'
+    },
+    lastDoneString: function(){
+      var runningTotal = 0
+      var lastTime
+      var now = Date.now()
+      for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+        runningTotal += this.tallyData.tallies[index].quantity;
+        lastTime = this.tallyData.tallies[index].timestamp;
+        if(runningTotal > 0){break}
+      };
+      var deltaT = now-lastTime
+      var deltaHours = Math.floor(deltaT / (60*60*1000))
+      console.log(deltaHours)
+      var lastDate = new Date(lastTime)
+      if(deltaHours>=24){
+        return `${1900+lastDate.getYear()}-${1+lastDate.getMonth}-${lastDate.getDay()}`
+      }
+      if(deltaHours < 1){
+        return 'less than an hour ago'
+      }
+      if(deltaHours < 2){
+        return 'an hour ago'
+      }
+
+      return `${deltaHours} hours ago`
+
+    }
+  },
+
   methods:{
     countPlusPlus: function(){
-      this.tallyData.count += 1
+      this.tallyData.tallies.push({quantity: 1, timestamp: Date.now()})
       this.$emit('change')
     },
     countMinusMinus: function(){
-      this.tallyData.count -= 1
+      this.tallyData.tallies.push({quantity: -1, timestamp: Date.now()})
       this.$emit('change')
     }
 
@@ -76,6 +151,29 @@ Vue.component("tally-form", {
     <form>
       <span>Tally Description</span>
       <input type='text' v-model='description'></input>
+      <br>
+      <span>Track periodic goal?</span>
+      <input type='checkbox' v-model='goal.hasGoal'></input>
+      <div class='goal_subform' v-if='goal.hasGoal'>
+        I want to do this thing
+        <select v-model='goal.atLeast'>
+          <option v-bind:value="true">at least</option>
+          <option v-bind:value="false">at most</option>
+        </select>
+        <input
+          type='number'
+          min='1' value='1'
+          v-model='goal.target'>
+        </input>
+        {{goal.target==1 ? 'time' : 'times'}}
+        every
+        <input
+          type='number'
+          min='1'
+          v-model='goal.interval'>
+        </input>
+        days
+      </div>
       <button
         v-on:click='finishCreate'>
         Go!
@@ -84,17 +182,21 @@ Vue.component("tally-form", {
 
   `,
   data: function(){
-    return { count: 0, description: ''}
+    return {
+      tallies: [],
+      description: '',
+      goal:{hasGoal:false, target:1, interval:1, atLeast:true}}
   },
   methods:{
     finishCreate: function(event){
       event.preventDefault()
-      console.log(this.$data)
-      console.log(JSON.stringify(this.$data))
+      var outputData = JSON.parse(JSON.stringify(this.$data))
+      // if(!outputData.hasGoal){outputData.goal=false}
+      // delete outputData.hasGoal
+      console.log(outputData)
+      console.log(JSON.stringify(outputData))
       // console.log(this)
-      this.$emit('submitCreate', this.$data)
+      this.$emit('submitCreate', outputData)
     }
   }
-
-
 })

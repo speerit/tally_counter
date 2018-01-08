@@ -1,0 +1,13 @@
+expand tally data from
+  description,
+  count
+to
+  description
+  goal {}
+    hasGoal
+    atLeast
+    interval
+    target
+  tallies [{}]
+    quantity
+    timestamp
