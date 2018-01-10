@@ -119,7 +119,7 @@ Vue.component( "tally-block" , {
       console.log(deltaHours)
       var lastDate = new Date(lastTime)
       if(deltaHours>=24){
-        return `${1900+lastDate.getYear()}-${1+lastDate.getMonth}-${lastDate.getDay()}`
+        return `${1900+lastDate.getYear()}-${1+lastDate.getMonth()}-${lastDate.getDay()}`
       }
       if(deltaHours < 1){
         return 'less than an hour ago'
