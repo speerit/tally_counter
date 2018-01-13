@@ -54,7 +54,7 @@ Vue.component( "tally-block" , {
         per {{tallyData.goal.interval}} days
     </div>
     <div class='status-block'>
-      Last done: {{lastDoneString}}
+      {{statusString}}
     </div>
     <div class='count-block'>
       <h3>Done {{count}} times.</h3>
@@ -127,8 +127,12 @@ Vue.component( "tally-block" , {
       if(deltaHours < 2){
         return 'an hour ago'
       }
-
       return `${deltaHours} hours ago`
+    },
+    statusString: function(){
+      if(!this.tallyData.goal.hasGoal){
+        return `Last done: ${this.lastDoneString}`
+      }
 
     }
   },
