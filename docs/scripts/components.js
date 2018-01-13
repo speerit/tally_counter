@@ -53,7 +53,7 @@ Vue.component( "tally-block" , {
         {{tallyData.goal.target==1 ? "time" : "times"}}
         per {{tallyData.goal.interval}} days
     </div>
-    <div class='last-done-block' v-if='!tallyData.goal.hasGoal'>
+    <div class='status-block'>
       Last done: {{lastDoneString}}
     </div>
     <div class='count-block'>
