@@ -1,0 +1,9 @@
+a view feature that gives information on status of goals
+  deficit for achieving goals
+    "you need to do this X more times"
+  time until goal is in arrears
+    "goal is satisfied for X more days/hours"
+  surplus for antigoals
+    "you can do this X more times"
+  time until activity can be done again for antigoals
+    "wait for X more days/hours before doing this again"

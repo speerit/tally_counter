@@ -127,5 +127,15 @@ describe('TallyBlock', function(){
       // debugger
     })
   })
+
+  describe('Tally goal status tracking', function(){
+    it('should inform me of a goal deficit', function(){
+      var statusText = blockWGoal.$mount().$el.querySelector('.stats-block').textContent
+      expect(statusText.includes('3')).toEqual(true)
+      blockWGoal.countPlusPlus()
+      var statusText = blockWGoal.$mount().$el.querySelector('.stats-block').textContent
+      expect(statusText.includes('2')).toEqual(true)
+    })
+  })
 });
 
