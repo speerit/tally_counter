@@ -141,10 +141,17 @@ describe('TallyBlock', function(){
   describe('Tally goal status tracking', function(){
     it('should inform me of a goal deficit', function(){
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText).contain('3')
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target)
       blockWGoal.countPlusPlus()
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText).contain('2')
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target-1)
+    })
+    it('should inform me of a goal deficit based on tallies', function(){
+      // var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      // expect(statusText).toContain(blockWGoal.tallyData.goal.target)
+      blockWGoal.countPlusPlus()
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target-1)
     })
     it('should inform me of a goal time surplus', function(){
       blockWGoal.tallyData.tallies = [
@@ -183,10 +190,10 @@ describe('TallyBlock', function(){
     })
     it('should inform me of an anti-goal surplus', function(){
       var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText).contain('3')
+      expect(statusText).toContain(blockWAntiGoal.tallyData.goal.target)
       blockWAntiGoal.countPlusPlus()
       var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText).contain('2')
+      expect(statusText).toContain(blockWAntiGoal.tallyData.goal.target-1)
     })
     it('should inform me of anti-goal wait time', function(){
       blockWAntiGoal.tallyData.tallies = [

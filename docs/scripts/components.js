@@ -104,7 +104,7 @@ Vue.component( "tally-block" , {
       return (this.tallyData.goal.interval*24*3600*1000)
     },
     statusObj: function(){
-      var out = {timeFinished:0, lastTime:0, targetDiff:0};
+      var out = {timeFinished:0, lastTime:0, targetDiff:this.tallyData.goal.target};
       var runningTotal = 0
       var now = Date.now()
       for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
@@ -126,6 +126,7 @@ Vue.component( "tally-block" , {
           break
         }
       };
+      out.targetDiff = Math.max(this.tallyData.goal.target-runningTotal,0)
       console.log(out)
       return out
     },
@@ -170,6 +171,7 @@ Vue.component( "tally-block" , {
           }
           return `${prefix} ${hourForm.hours} more hours`
         }
+        return `You need to do this goal ${this.statusObj.targetDiff} more times`
       }
     },
   },
