@@ -7,3 +7,29 @@ a view feature that gives information on status of goals
     "you can do this X more times"
   time until activity can be done again for antigoals
     "wait for X more days/hours before doing this again"
+
+statusString psudeo code
+is goal satisfied?
+  if so:
+    TL was the time of the earliest tally needed to accomplish goal
+    interval is the time window in days
+    T0 is now
+    delT = T0-TL is how long it's been since last finished
+    remainT = interval(ms)-delT is how many miliseconds until goal is no longer
+    format remainT as desired
+  if not:
+    sum tallies over interval:: goalProgress
+    targetDiff= target-goalProgress
+is anti goal satisfied?
+  if so:
+    sum tallies over interval:: goalProgress
+    targetDiff = target-goalProgress
+    if targetDiff is greater than 0
+      report targetDiff
+    else
+      report like goal is unsatisfied
+  if not:
+    TL was time stamp when targetDiff became 0
+    T0 is now
+    delT is TL-T0
+    remainT is interval - delT

@@ -105,15 +105,40 @@ Vue.component( "tally-block" , {
       if(this.goalMet){return 'goal-met'}
       return 'goal-unmet'
     },
-    lastDoneString: function(){
+    intervalMS:function(){
+      return (this.tallyData.goal.interval*24*3600*1000)
+    },
+    statusObj: function(){
+      var out = {timeFinished:0, lastTime:0, targetDiff:0};
       var runningTotal = 0
-      var lastTime
       var now = Date.now()
       for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+        var time = this.tallyData.tallies[index].timestamp
+        if((now-time) > this.intervalMS){
+          out.targetDiff = this.tallyData.goal.target-runningTotal
+          break
+        }
         runningTotal += this.tallyData.tallies[index].quantity;
-        lastTime = this.tallyData.tallies[index].timestamp;
-        if(runningTotal > 0){break}
+        if(runningTotal>0 && time > out.lastTime){
+          out.lastTime = time
+        }
+        if(runningTotal === this.tallyData.goal.target){
+          out.timeFinished = time
+          break
+        }
       };
+      console.log(out)
+      return out
+    },
+    lastDoneString: function(){
+      var runningTotal = 0
+      var lastTime = this.statusObj.lastTime
+      var now = Date.now()
+      // for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+      //   runningTotal += this.tallyData.tallies[index].quantity;
+      //   lastTime = this.tallyData.tallies[index].timestamp;
+      //   if(runningTotal > 0){break}
+      // };
       var deltaT = now-lastTime
       var deltaHours = Math.floor(deltaT / (60*60*1000))
       console.log(deltaHours)
@@ -133,8 +158,7 @@ Vue.component( "tally-block" , {
       if(!this.tallyData.goal.hasGoal){
         return `Last done: ${this.lastDoneString}`
       }
-
-    }
+    },
   },
 
   methods:{
