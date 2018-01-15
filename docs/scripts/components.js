@@ -27,12 +27,9 @@ Vue.component( "tally-list" , {
   data: function (){return {tallies: load(), newTally: false}},
   methods:{
     saveTallies: function(){
-      console.log("ran")
       save(this.tallies)
     },
     parseForm: function(formData){
-      console.log('parser ran')
-      console.log(formData)
       this.tallies.push(formData)
       this.newTally = false
       this.saveTallies()
@@ -73,10 +70,8 @@ Vue.component( "tally-block" , {
   computed:{
     count: function(){
       var totalCount = 0
-      console.log("count calculated")
       for (var index = 0; index < this.tallyData.tallies.length; index++) {
         totalCount += this.tallyData.tallies[index].quantity
-        console.log(this.tallyData.tallies[index].quantity)
       };
       return totalCount
     },
@@ -219,11 +214,6 @@ Vue.component("tally-form", {
     finishCreate: function(event){
       event.preventDefault()
       var outputData = JSON.parse(JSON.stringify(this.$data))
-      // if(!outputData.hasGoal){outputData.goal=false}
-      // delete outputData.hasGoal
-      console.log(outputData)
-      console.log(JSON.stringify(outputData))
-      // console.log(this)
       this.$emit('submitCreate', outputData)
     }
   }
