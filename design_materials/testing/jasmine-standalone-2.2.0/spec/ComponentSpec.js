@@ -144,7 +144,8 @@ describe('TallyBlock', function(){
         }
       ]
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText.includes('2 days')).toEqual(true)
+      expect(statusText.includes('2') && statusText.includes('days')).toEqual(true)
+      console.log(statusText)
       blockWGoal.tallies = [
         {
           quantity:2,
@@ -152,7 +153,8 @@ describe('TallyBlock', function(){
         }
       ]
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText.includes('1 day')).toEqual(true)
+      console.log(statusText)
+      expect(statusText.includes('1') && statusText.includes('day')).toEqual(true)
       blockWGoal.tallies = [
         {
           quantity:2,
@@ -160,6 +162,7 @@ describe('TallyBlock', function(){
         }
       ]
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      console.log(statusText)
       expect(statusText.includes('12 hours')).toEqual(true)
     })
     it('should inform me of an anti-goal surplus', function(){

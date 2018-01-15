@@ -150,6 +150,26 @@ Vue.component( "tally-block" , {
       if(!this.tallyData.goal.hasGoal){
         return `Last done: ${this.lastDoneString}`
       }
+      if(this.tallyData.goal.atLeast){
+        if(this.goalMet){
+          var delT = Date.now() - this.statusObj.timeFinished
+          var timeRemaining = (this.intervalMS-delT)
+          console.log(timeRemaining)
+          var hourForm = millisecToHoursDays(timeRemaining)
+          var prefix = 'Goal is satisfied for'
+          console.log('satisified hit')
+          console.log(hourForm)
+          if(hourForm.days>0){
+            console.log('satisified hit')
+            console.log(`${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`)
+            return `${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`
+          }
+          if(hourForm.hours >1){
+            return `${prefix} less than an hour`
+          }
+          return `${prefix} ${hourForm.hours} more hours`
+        }
+      }
     },
   },
 
