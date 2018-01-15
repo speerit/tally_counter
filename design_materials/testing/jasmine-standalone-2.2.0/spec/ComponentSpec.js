@@ -154,27 +154,32 @@ describe('TallyBlock', function(){
         }
       ]
       var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      expect(statusText.includes('2') && statusText.includes('days')).toEqual(true)
-      // console.log('test value', blockWGoal.statusObj)
-      // console.log(statusText)
-      // blockWGoal.tallies = [
-      //   {
-      //     quantity:2,
-      //     timestamp: Date.now()-1.5*24*3600*1000
-      //   }
-      // ]
-      // var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      // console.log(statusText)
-      // debugger
-      // expect(statusText.includes('1') && statusText.includes('day')).toEqual(true)
-      // blockWGoal.tallies = [
-      //   {
-      //     quantity:2,
-      //     timestamp: Date.now()-2.495*24*3600*1000
-      //   }
-      // ]
-      // var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
-      // expect(statusText.includes('12 more hours')).toEqual(true)
+      expect(statusText).toContain('2')
+      expect(statusText).toContain('days')
+    })
+    it('should inform me of a goal time surplus as only one day', function(){
+      blockWGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(19+24)*3600*1000
+        }
+      ]
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('1')
+      expect(statusText).toContain('day')
+      expect(statusText).not.toContain('days')
+    })
+    it('should inform me of a goal time surplus in hours', function(){
+      blockWGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(11.5+2*24)*3600*1000
+        }
+      ]
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('12')
+      expect(statusText).toContain('hours')
+      expect(statusText).not.toContain('days')
     })
     it('should inform me of an anti-goal surplus', function(){
       var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
