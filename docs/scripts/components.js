@@ -109,13 +109,16 @@ Vue.component( "tally-block" , {
       var now = Date.now()
       for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
         var time = this.tallyData.tallies[index].timestamp
-        if((now-time) > this.intervalMS){
+        console.log(this.intervalMS, (now-time), this.tallyData.goal.hasGoal)
+        if((now-time) > this.intervalMS && this.tallyData.goal.hasGoal){
           out.targetDiff = this.tallyData.goal.target-runningTotal
           break
         }
         runningTotal += this.tallyData.tallies[index].quantity;
+        console.log(runningTotal)
         if(runningTotal>0 && time > out.lastTime){
           out.lastTime = time
+          if(!this.tallyData.goal.hasGoal){break}
         }
         if(runningTotal === this.tallyData.goal.target){
           out.timeFinished = time
@@ -129,14 +132,8 @@ Vue.component( "tally-block" , {
       var runningTotal = 0
       var lastTime = this.statusObj.lastTime
       var now = Date.now()
-      // for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
-      //   runningTotal += this.tallyData.tallies[index].quantity;
-      //   lastTime = this.tallyData.tallies[index].timestamp;
-      //   if(runningTotal > 0){break}
-      // };
       var deltaT = now-lastTime
       var deltaHours = Math.floor(deltaT / (60*60*1000))
-      console.log(deltaHours)
       var lastDate = new Date(lastTime)
       if(deltaHours>=24){
         return `${1900+lastDate.getYear()}-${1+lastDate.getMonth()}-${lastDate.getDay()}`
