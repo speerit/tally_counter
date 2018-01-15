@@ -155,7 +155,7 @@ Vue.component( "tally-block" , {
         if(this.goalMet){
           var delT = Date.now() - this.statusObj.timeFinished
           var timeRemaining = (this.intervalMS-delT)
-          console.log(timeRemaining)
+          console.log(timeRemaining, this.tallyData.description)
           var hourForm = millisecToHoursDays(timeRemaining)
           var prefix = 'Goal is satisfied for'
           console.log('satisified hit')
@@ -165,7 +165,7 @@ Vue.component( "tally-block" , {
             console.log(`${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`)
             return `${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`
           }
-          if(hourForm.hours >1){
+          if(hourForm.hours <1){
             return `${prefix} less than an hour`
           }
           return `${prefix} ${hourForm.hours} more hours`
