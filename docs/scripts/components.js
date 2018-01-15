@@ -112,15 +112,16 @@ Vue.component( "tally-block" , {
         console.log(this.intervalMS, (now-time), this.tallyData.goal.hasGoal)
         if((now-time) > this.intervalMS && this.tallyData.goal.hasGoal){
           out.targetDiff = this.tallyData.goal.target-runningTotal
+          console.log('out of interval break')
           break
         }
         runningTotal += this.tallyData.tallies[index].quantity;
         console.log(runningTotal)
         if(runningTotal>0 && time > out.lastTime){
           out.lastTime = time
-          if(!this.tallyData.goal.hasGoal){break}
+          if(!this.tallyData.goal.hasGoal){console.log('goalless break');break}
         }
-        if(runningTotal === this.tallyData.goal.target){
+        if(runningTotal >= this.tallyData.goal.target){
           out.timeFinished = time
           break
         }
