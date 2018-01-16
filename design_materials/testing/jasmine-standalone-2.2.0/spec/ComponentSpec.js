@@ -127,5 +127,109 @@ describe('TallyBlock', function(){
       // debugger
     })
   })
+
+  describe('the tally statusObj', function(){
+    it('should report when a goal was finished', function(){
+      blockWGoal.tallyData.tallies.push(
+        {quantity:4, timestamp:Date.now()-1*86400000}
+        )
+      expect(blockWGoal.statusObj.timeFinished>0).toEqual(true)
+      expect(blockWGoal.statusObj.timeFinished<Date.now()).toEqual(true)
+    })
+
+  })
+  describe('Tally goal status tracking', function(){
+    it('should inform me of a goal deficit', function(){
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target)
+      blockWGoal.countPlusPlus()
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target-1)
+    })
+    it('should inform me of a goal deficit based on tallies', function(){
+      // var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      // expect(statusText).toContain(blockWGoal.tallyData.goal.target)
+      blockWGoal.countPlusPlus()
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWGoal.tallyData.goal.target-1)
+    })
+    it('should inform me of a goal time surplus', function(){
+      blockWGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-19*3600*1000
+        }
+      ]
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('2')
+      expect(statusText).toContain('days')
+    })
+    it('should inform me of a goal time surplus as only one day', function(){
+      blockWGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(19+24)*3600*1000
+        }
+      ]
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('1')
+      expect(statusText).toContain('day')
+      expect(statusText).not.toContain('days')
+    })
+    it('should inform me of a goal time surplus in hours', function(){
+      blockWGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(11.5+2*24)*3600*1000
+        }
+      ]
+      var statusText = blockWGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('12')
+      expect(statusText).toContain('hours')
+      expect(statusText).not.toContain('days')
+    })
+    it('should inform me of an anti-goal surplus', function(){
+      var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWAntiGoal.tallyData.goal.target)
+      blockWAntiGoal.countPlusPlus()
+      var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain(blockWAntiGoal.tallyData.goal.target-1)
+    })
+    it('should inform me of anti-goal wait time', function(){
+      blockWAntiGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-19*3600*1000
+        }
+      ]
+      var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('2')
+      expect(statusText).toContain('days')
+    })
+    it('should inform me of anti-goal wait time as only one day', function(){
+      blockWAntiGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(19+24)*3600*1000
+        }
+      ]
+      var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('1')
+      expect(statusText).toContain('day')
+      expect(statusText).not.toContain('days')
+    })
+    it('should inform me of anti-goal wait time in hours', function(){
+      blockWAntiGoal.tallyData.tallies = [
+        {
+          quantity:2,
+          timestamp: Date.now()-(11.5+2*24)*3600*1000
+        }
+      ]
+      var statusText = blockWAntiGoal.$mount().$el.querySelector('.status-block').textContent
+      expect(statusText).toContain('12')
+      expect(statusText).toContain('hours')
+      expect(statusText).not.toContain('days')
+    })
+  })
 });
 

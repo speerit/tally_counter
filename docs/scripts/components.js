@@ -27,12 +27,9 @@ Vue.component( "tally-list" , {
   data: function (){return {tallies: load(), newTally: false}},
   methods:{
     saveTallies: function(){
-      console.log("ran")
       save(this.tallies)
     },
     parseForm: function(formData){
-      console.log('parser ran')
-      console.log(formData)
       this.tallies.push(formData)
       this.newTally = false
       this.saveTallies()
@@ -53,8 +50,8 @@ Vue.component( "tally-block" , {
         {{tallyData.goal.target==1 ? "time" : "times"}}
         per {{tallyData.goal.interval}} days
     </div>
-    <div class='last-done-block' v-if='!tallyData.goal.hasGoal'>
-      Last done: {{lastDoneString}}
+    <div class='status-block'>
+      {{statusString}}
     </div>
     <div class='count-block'>
       <h3>Done {{count}} times.</h3>
@@ -73,10 +70,8 @@ Vue.component( "tally-block" , {
   computed:{
     count: function(){
       var totalCount = 0
-      console.log("count calculated")
       for (var index = 0; index < this.tallyData.tallies.length; index++) {
         totalCount += this.tallyData.tallies[index].quantity
-        console.log(this.tallyData.tallies[index].quantity)
       };
       return totalCount
     },
@@ -105,18 +100,42 @@ Vue.component( "tally-block" , {
       if(this.goalMet){return 'goal-met'}
       return 'goal-unmet'
     },
-    lastDoneString: function(){
+    intervalMS:function(){
+      return (this.tallyData.goal.interval*24*3600*1000)
+    },
+    statusObj: function(){
+      var out = {timeFinished:0, lastTime:0, targetDiff:this.tallyData.goal.target};
       var runningTotal = 0
-      var lastTime
       var now = Date.now()
       for (var index = this.tallyData.tallies.length-1; 0 <= index; index--) {
+        var time = this.tallyData.tallies[index].timestamp
+        console.log(this.intervalMS, (now-time), this.tallyData.goal.hasGoal)
+        if((now-time) > this.intervalMS && this.tallyData.goal.hasGoal){
+          out.targetDiff = this.tallyData.goal.target-runningTotal
+          console.log('out of interval break')
+          break
+        }
         runningTotal += this.tallyData.tallies[index].quantity;
-        lastTime = this.tallyData.tallies[index].timestamp;
-        if(runningTotal > 0){break}
+        console.log(runningTotal)
+        if(runningTotal>0 && time > out.lastTime){
+          out.lastTime = time
+          if(!this.tallyData.goal.hasGoal){console.log('goalless break');break}
+        }
+        if(runningTotal >= this.tallyData.goal.target){
+          out.timeFinished = time
+          break
+        }
       };
+      out.targetDiff = Math.max(this.tallyData.goal.target-runningTotal,0)
+      console.log(out)
+      return out
+    },
+    lastDoneString: function(){
+      var runningTotal = 0
+      var lastTime = this.statusObj.lastTime
+      var now = Date.now()
       var deltaT = now-lastTime
       var deltaHours = Math.floor(deltaT / (60*60*1000))
-      console.log(deltaHours)
       var lastDate = new Date(lastTime)
       if(deltaHours>=24){
         return `${1900+lastDate.getYear()}-${1+lastDate.getMonth()}-${lastDate.getDay()}`
@@ -127,10 +146,49 @@ Vue.component( "tally-block" , {
       if(deltaHours < 2){
         return 'an hour ago'
       }
-
       return `${deltaHours} hours ago`
-
-    }
+    },
+    statusString: function(){
+      if(!this.tallyData.goal.hasGoal){
+        return `Last done: ${this.lastDoneString}`
+      }
+      if(this.tallyData.goal.atLeast){
+        if(this.goalMet){
+          var delT = Date.now() - this.statusObj.timeFinished
+          var timeRemaining = (this.intervalMS-delT)
+          var hourForm = millisecToHoursDays(timeRemaining)
+          var prefix = 'Goal is satisfied for'
+          var timeCount
+          var timeUnit
+          if(hourForm.days>0){
+            timeCount = hourForm.days
+            timeUnit = hourForm.days===1 ? 'day' : 'days'
+          } else{
+            timeCount = hourForm.hours
+            timeUnit = hourForm.hours===1 ? 'hour' : 'hours'
+          }
+          return `${prefix} ${timeCount} more ${timeUnit}`
+        }
+        return `You need to do this goal ${this.statusObj.targetDiff} more times`
+      }
+      if(this.statusObj.targetDiff>0){
+        return `You can do this activity ${this.statusObj.targetDiff} more times`
+      }
+      var prefix = 'You can do this activity again in'
+      var delT = Date.now() - this.statusObj.timeFinished
+      var timeRemaining = (this.intervalMS-delT)
+      var hourForm = millisecToHoursDays(timeRemaining)
+      var timeCount
+      var timeUnit
+      if(hourForm.days>0){
+        timeCount = hourForm.days
+        timeUnit = hourForm.days===1 ? 'day' : 'days'
+      } else{
+        timeCount = hourForm.hours
+        timeUnit = hourForm.hours===1 ? 'hour' : 'hours'
+      }
+      return `${prefix} ${timeCount} more ${timeUnit}`
+    },
   },
 
   methods:{
@@ -191,11 +249,6 @@ Vue.component("tally-form", {
     finishCreate: function(event){
       event.preventDefault()
       var outputData = JSON.parse(JSON.stringify(this.$data))
-      // if(!outputData.hasGoal){outputData.goal=false}
-      // delete outputData.hasGoal
-      console.log(outputData)
-      console.log(JSON.stringify(outputData))
-      // console.log(this)
       this.$emit('submitCreate', outputData)
     }
   }

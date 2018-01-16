@@ -24,6 +24,13 @@ function save(array){
   )
 }
 
+function millisecToHoursDays(milliseconds){
+  var days = Math.floor(milliseconds/(24*3600*1000))
+  var remainder = milliseconds-(days*24*3600*1000)
+  var hours = Math.floor(remainder/(3600*1000))
+  return {hours:hours, days:days}
+}
+
 function versionUpdate1to2(oldData){
   var newData = []
   for(var index = 0; index < oldData.length; index++){
