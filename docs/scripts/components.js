@@ -156,20 +156,18 @@ Vue.component( "tally-block" , {
         if(this.goalMet){
           var delT = Date.now() - this.statusObj.timeFinished
           var timeRemaining = (this.intervalMS-delT)
-          console.log(timeRemaining, this.tallyData.description)
           var hourForm = millisecToHoursDays(timeRemaining)
           var prefix = 'Goal is satisfied for'
-          console.log('satisified hit')
-          console.log(hourForm)
+          var timeCount
+          var timeUnit
           if(hourForm.days>0){
-            console.log('satisified hit')
-            console.log(`${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`)
-            return `${prefix} ${hourForm.days} more day${hourForm.days==1 ? '':'s'}`
+            timeCount = hourForm.days
+            timeUnit = hourForm.days===1 ? 'day' : 'days'
+          } else{
+            timeCount = hourForm.hours
+            timeUnit = hourForm.hours===1 ? 'hour' : 'hours'
           }
-          if(hourForm.hours <1){
-            return `${prefix} less than an hour`
-          }
-          return `${prefix} ${hourForm.hours} more hours`
+          return `${prefix} ${timeCount} more ${timeUnit}`
         }
         return `You need to do this goal ${this.statusObj.targetDiff} more times`
       }
