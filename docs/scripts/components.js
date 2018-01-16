@@ -173,6 +173,23 @@ Vue.component( "tally-block" , {
         }
         return `You need to do this goal ${this.statusObj.targetDiff} more times`
       }
+      if(this.statusObj.targetDiff>0){
+        return `You can do this activity ${this.statusObj.targetDiff} more times`
+      }
+      var prefix = 'You can do this activity again in'
+      var delT = Date.now() - this.statusObj.timeFinished
+      var timeRemaining = (this.intervalMS-delT)
+      var hourForm = millisecToHoursDays(timeRemaining)
+      var timeCount
+      var timeUnit
+      if(hourForm.days>0){
+        timeCount = hourForm.days
+        timeUnit = hourForm.days===1 ? 'day' : 'days'
+      } else{
+        timeCount = hourForm.hours
+        timeUnit = hourForm.hours===1 ? 'hour' : 'hours'
+      }
+      return `${prefix} ${timeCount} more ${timeUnit}`
     },
   },
 
